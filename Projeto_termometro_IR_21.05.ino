@@ -1,6 +1,9 @@
 /*
   Projeto : Termometro  utilizando o sensor de temperatura infravermelho MLX90614
   Autor Daniel Vieira
+
+  Com o comando temperatura.ambient() realiza a leitura da temperatura do ambiente
+  temperatura.object() realiza a leitura da temperatura do objeto
  */
 
 // --- Inclusao de bibliotecas 
@@ -26,21 +29,19 @@ boolean en_sensor =0;
 unsigned long interval = 200;
 void setup()
 {
+   
+   Wire.begin(); //INICIALIZA A BIBLIOTECA WIRE
    temperatura.begin(0x5A);
    temperatura.setUnit(TEMP_C);
-   Wire.begin(); //INICIALIZA A BIBLIOTECA WIRE
   display.begin(0x3C); //INICIALIZA O DISPLAY COM ENDEREÇO I2C 0x3C
   display.setTextColor(WHITE); //DEFINE A COR DO TEXTO
   pinMode(B0,INPUT);
   pinMode(led_azul,OUTPUT);
   pinMode(led_vermelho,OUTPUT);
-    Serial.begin(9600);
+  Serial.begin(9600);
   Serial.println("Termometro infravermelho ");
   Serial.println("Covid 19 ");
-  display.setCursor(10, 0);       // Posiciona o cursor
-  display.setTextSize(1);       // Define tamanho da fonte
-  display.print("TERMOMETRO IR "); 
-  delay(2000);
+  
 }
 void loop()
 {
@@ -74,7 +75,7 @@ void loop()
        for (int i=0; i<10; i++)
        {
           soma_temp+= temperatura.object();
-          delay(100);
+          delay(10);
        }
 
        media_temp = soma_temp /10;
@@ -92,7 +93,7 @@ void loop()
        Serial.print("Temperatura objeto :");
        Serial.print(media_temp, 2);
        Serial.println(" oC ");
-           // Imprime ...
+           
             
       
       if(media_temp >39 )
@@ -113,11 +114,7 @@ void loop()
      display.display();
 
      
-    //display.print("Ambiente: " + String(temperatura.ambient(), 2));
-   // Serial.print("Temperatura ambiente :");
-   // Serial.print(temperatura.ambient(), 2);
-   // Serial.println(" oC ");
-   // display.print(" oC");       // Imprime ...
+    
     
     
   }
@@ -128,7 +125,19 @@ void loop()
    
     }  
  
-
+  else
+  {
+      display.clearDisplay();
+      display.setCursor(10, 0);       // Posiciona o cursor
+      display.setTextSize(1);       // Define tamanho da fonte
+      display.print("TERMOMETRO IR "); 
+      display.setCursor(0, 10);       // Posiciona o cursor
+      display.setTextSize(1);       // Define tamanho da fonte
+      display.print("Pressione o botao"); 
+      display.setCursor(0, 20);
+      display.print("Para ativar o sensor"); 
+      display.display();
+  }
 }
  
             
